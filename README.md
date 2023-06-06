@@ -54,6 +54,10 @@ python main.py --obs-space MipMtl --view-model <path from main.py directory> --e
 ## Pretraied models 
 Pretrained models for each of the three architectures have been made available in the PPO\_models folder. A folder is provided for each training sessions wherein there have been saved iterative versions every 10.000 timesteps. The corresponding timestep for each saved model is given in the title. For convinience the version with the highest episode reward mean as provided by the TensorBoard logs have been duplicated and placed in directly in the PPO\_models folder.
 
+* CnnMtl_long is a continuation of CnnMtl_2
+* MtlMip_long is a continuation of MtlMip_1
+* rgb_long is a continuation of rgb_1
+
 ## Other considerations
 Due to hardware constraints the Viewer impelemtations could not run using a CARLA simulation server opened with the -opengl and -quality-level=Epic flags. Thus the camera images produced by the CARLA simulation and passed as inputs to the RL components are inferior in the Viewer implementations compared to the Trainer implementation. Specifically, the segmantic segmentation and depth images get black splotches due to omitting the -opengl flag. This may lead to slightly lower performance in the Viewer mode.
 Due to this the evaluate_reward option uses the Trainer component and is performed off-screen for the most accurate reward values. 
