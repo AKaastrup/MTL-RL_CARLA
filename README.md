@@ -6,6 +6,11 @@ This repocitory holds the code implementation for a pseudo MTL Deep-RL autonomou
 
 This implementation aims to compare the performance of a pseudo MTL Deep-RL arhitecture (two options provided) and a pure Deep-RL architecture to determine if an expansion of the state space facilicated by the MTL component can yield make helpful features more accessable to the subsequent RL component thereby increasing performance. For this use case, an autonomous vehichle is trained to navigate using RGB inputs in an end-to-end approch. For the MTL variants the MTL component would produce the corresponding segmantic segmentation and depth regression for the input image. The RL component would then train on all three images. 
 
+## Dependancies and setup
+The implementation uses [OpenAi Gymnaisum](https://gymnasium.farama.org), [Stable Baselines3](https://stable-baselines.readthedocs.io/en/master/) and the [CARLA simulator](https://carla.org) to facilitate the training. This implementation was tested using the 0.9.11 CARLA version and was installed using the Debian CARLA installation method as is described in [this guide](https://carla.readthedocs.io/en/latest/start_quickstart/). 
+
+For alternative CARLA installation is may be necessay to reconfigure the carla_env.py \_setup() function such that the carla_dir variable refers to the correct directory.
+
 ## Commandline parameters 
 * --training-algorithm: Training algorithm to be used. \[PPO, SAC\]. Default PPO
 * --obs_space: Observation space to be used. \[rgb, CnnMtl, MipMtl\]
@@ -47,12 +52,13 @@ python main.py --obs-space MipMtl --view-model <path from main.py directory> --e
 
 
 ## Pretraied models 
-
+Pretrained models for each of the three architectures have been made available in the PPO\_models folder. A folder is provided for each training sessions wherein there have been saved iterative versions every 10.000 timesteps. The corresponding timestep for each saved model is given in the title. For convinience the version with the highest episode reward mean as provided by the TensorBoard logs have been duplicated and placed in directly in the PPO\_models folder.
 
 ## Other considerations
-Due to hardware constraints the Viewer impelemtations could not run using a CARLA simulation server opened with the -opengl and -quality-level=Epic flags. Thus the camera images produced by the CARLA simulation and passed as inputs to the RL components are inferior in the Viewer implementations compared to the trainer implementation. Specifically, the segmantic segmentation and depth images get black splotches due to omitting the -opengl flag. This may lead to slightly lower performance in the Viewer mode.
+Due to hardware constraints the Viewer impelemtations could not run using a CARLA simulation server opened with the -opengl and -quality-level=Epic flags. Thus the camera images produced by the CARLA simulation and passed as inputs to the RL components are inferior in the Viewer implementations compared to the Trainer implementation. Specifically, the segmantic segmentation and depth images get black splotches due to omitting the -opengl flag. This may lead to slightly lower performance in the Viewer mode.
 Due to this the evaluate_reward option uses the Trainer component and is performed off-screen for the most accurate reward values. 
-If a higher capacity is available it is recommended to update the code such that the on-screen CARLA server uses these flags. Found in carla_env.py setup():
+If a higher capacity is available it is recommended to update the code such that the on-screen CARLA server uses these flags. Found in carla_env.py \_setup().
+
 Update:
 ```bash
 if self.view:
