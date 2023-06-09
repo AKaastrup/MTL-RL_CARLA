@@ -4,7 +4,7 @@ Simulated combined MTL-RL network trained in CARLA simulation
 ## Introduction 
 This repocitory holds the code implementation for a pseudo MTL Deep-RL autonomous system trained for autonomous nagigation of a vechicle. The implementation is facilicated by the OpenAI Gymnasium and Stable Baselines3 implementations and the CARLA simulation environment. Credit is given to yanlai00/RL-Carla as their custom CARLA gymnasium enviornment was used as a starting point for this implementation. 
 
-This implementation aims to compare the performance of a pseudo MTL Deep-RL arhitecture (two options provided) and a pure Deep-RL architecture to determine if an expansion of the state space facilicated by the MTL component can yield make helpful features more accessable to the subsequent RL component thereby increasing performance. For this use case, an autonomous vehichle is trained to navigate using RGB inputs in an end-to-end approch. For the MTL variants the MTL component would produce the corresponding segmantic segmentation and depth regression for the input image. The RL component would then train on all three images. 
+This implementation aims to compare the performance of a pseudo-MTL Deep-RL arhitecture (two options provided) and a pure Deep-RL architecture to determine if an expansion of the state space facilicated by the MTL component can yield make helpful features more accessable to the subsequent RL component thereby increasing performance. For this use case, an autonomous vehichle is trained to navigate using RGB inputs in an end-to-end approch. For the MTL variants the MTL component would produce the corresponding segmantic segmentation and depth regression for the input image. The RL component would then train on all three images. 
 
 ## Dependancies and setup
 The implementation uses [OpenAi Gymnaisum](https://gymnasium.farama.org), [Stable Baselines3](https://stable-baselines.readthedocs.io/en/master/) and the [CARLA simulator](https://carla.org) to facilitate the training. This implementation was tested using the 0.9.11 CARLA version and was installed using the Debian CARLA installation method as is described in [this guide](https://carla.readthedocs.io/en/latest/start_quickstart/). 
@@ -49,6 +49,16 @@ python main.py --obs-space MipMtl --view-model <path from main.py directory> --e
 ```
 
 ## Arhitectures
+To facilitate the pure RL and combined pseudo-MTL Deep-RL variants 3 possible observations spaces are proposed to facilitate the arhitectures described below. Notice all these utilze the NatureCNN arhitecture as Stable Baselines3 has choosen this arhitecture for the convolutional policies. 
+
+The rgb arhitecture facilitates the pure RL implementation. It expects 3-channel inputs corresponding to an RGB image.  
+<img width="1421" alt="Rgb_labled_architecture_layerinfo_" src="https://github.com/AKaastrup/MTL-RL_CARLA/assets/90095663/3f8e1351-6b7f-4a11-8009-3611f3bfbac5">
+
+The CnnMtl architecture facilicates the first pseudo-MTL implementation. It utilizes the Stable Baselines3 CnnPolicy and expect 7-channel inputs. Of these 3 channels will accept the RGB images, 3 will accept an RGB interpretation of the segmantic segmentation image and 1 will accept the depth image. 
+<img width="1092" alt="Cnn_labled_architecture_layerinfo" src="https://github.com/AKaastrup/MTL-RL_CARLA/assets/90095663/677f779a-6352-447e-8213-5807efb945da">
+
+The MipMtl arhitecture facilicates the second pseudo-Mtl implementation. It utilizes the Stable Baselines3 MultiInputPolicy and expects a directionary of 3 seperate inputs strings each with 3 channels. The first string will accept the RGB images, the second will accept an RGB interpretation of the segmantic segmentation image and the last string will accept the depth image.
+<img width="1440" alt="MipMtl_labeled_architecture_layerinfo" src="https://github.com/AKaastrup/MTL-RL_CARLA/assets/90095663/eca434ac-3beb-42d8-a7e6-6465633568a6">
 
 
 ## Pretraied models 
